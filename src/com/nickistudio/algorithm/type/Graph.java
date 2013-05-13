@@ -11,7 +11,7 @@ public class Graph {
 		this.edges = edges;
 	}
 
-	public List<Vertex> getVertexes() {
+	public List<Vertex> getVertices() {
 		return vertexes;
 	}
 

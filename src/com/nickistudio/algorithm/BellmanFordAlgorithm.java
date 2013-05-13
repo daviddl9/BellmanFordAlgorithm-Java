@@ -1,74 +1,64 @@
 package com.nickistudio.algorithm;
 
-import java.util.LinkedList;
+import java.util.List;
 
-public class BellmanFordAlgorithm {
-	LinkedList<Edge> edges;
-	public int d[], p[];
-	public int n;
-	int e;
-	public int s;
-	final int INFINITY = 999;
+import com.nickistudio.algorithm.type.Edge;
+import com.nickistudio.algorithm.type.Graph;
+import com.nickistudio.algorithm.type.Vertex;
 
-	private static class Edge {
-		int u, v, w;
+public class BellmanFordAlgorithm
+{
+	final int INFINITY = Integer.MAX_VALUE;
 
-		public Edge(int a, int b, int c) {
-			u = a;
-			v = b;
-			w = c;
-		}
+	List<Edge> fEdges;
+	List<Vertex> fVertices;
+	boolean fHasNegative;
+	int d[];
+
+	public BellmanFordAlgorithm(Graph aGraph)
+	{
+		fEdges = aGraph.getEdges();
+		fVertices = aGraph.getVertices();
+		d = new int[fVertices.size()];
 	}
 
-	public BellmanFordAlgorithm() {
-		edges = new LinkedList<Edge>();
-		
-		n = 3;
-		edges.add(new Edge(0, 1, 99));
-		edges.add(new Edge(0, 2, 1));
-		edges.add(new Edge(1, 0, 4));
-		edges.add(new Edge(1, 2, 2));
-		edges.add(new Edge(2, 0, 2));
-		edges.add(new Edge(2, 1, 4));
-		
-		e = edges.size();
-		d = new int[n];
-		p = new int[n];
+	public void execute(Vertex aStartingVertex)
+	{
+		int s = fVertices.indexOf(aStartingVertex);
 
-		s = 0;
-		
-		relax();
-	}
-
-	public void relax() {
-		int i, j;
-		for (i = 0; i < n; ++i) {
+		// initialize
+		for (int i = 0; i < fVertices.size(); ++i)
 			d[i] = INFINITY;
-			p[i] = -1;
-		}
-
 		d[s] = 0;
-		for (i = 0; i < n - 1; ++i) {
-			for (j = 0; j < e; ++j) { // here i am calculating the shortest path
-				if (d[edges.get(j).u] + edges.get(j).w < d[edges.get(j).v]) {
-					d[edges.get(j).v] = d[edges.get(j).u] + edges.get(j).w;
-					p[edges.get(j).v] = edges.get(j).u;
+
+		// Relaxation
+		for (int i = 0; i < fVertices.size() - 1; ++i) {
+			for (Edge edge : fEdges) {
+				Vertex src = edge.getSource();
+				Vertex dst = edge.getDestination();
+				if (d[fVertices.indexOf(dst)] > d[fVertices.indexOf(src)] + edge.getWeight()) {
+					d[fVertices.indexOf(dst)] = d[fVertices.indexOf(src)] + edge.getWeight();
 				}
 			}
 		}
+
+		// Check for negative edges
+		for (Edge edge : fEdges) {
+			Vertex src = edge.getSource();
+			Vertex dst = edge.getDestination();
+			if (d[fVertices.indexOf(dst)] > d[fVertices.indexOf(src)] + edge.getWeight()) {
+				fHasNegative = true;
+			}
+		}
+
 	}
 
-	public boolean cycle() {
-		int j;
-		for (j = 0; j < e; ++j)
-			if (d[edges.get(j).u] + edges.get(j).w < d[edges.get(j).v])
-				return false;
-		return true;
-	}
-
-	public void print() {
-		for (int i = 0; i < n; i++) {
-			System.out.println("Vertex " + i + " has predecessor " + p[i]);
+	public void dump()
+	{
+		for (Edge edge : fEdges) {
+			Vertex dst = edge.getDestination();
+			System.out.printf("%s >==%d->%d==> %s\n", edge.getSource(), edge.getWeight(), d[fVertices.indexOf(dst)],
+					edge.getDestination());
 		}
 	}
 }

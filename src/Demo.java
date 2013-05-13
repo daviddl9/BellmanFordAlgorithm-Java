@@ -18,14 +18,16 @@ import com.nickistudio.algorithm.type.Vertex;
  * 2| 2|4|0
  *
  */
-public class Demo {
+public class Demo
+{
 
 	private List<Vertex> vertices;
 	private List<Edge> edges;
 	private Graph graph;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() throws Exception
+	{
 		vertices = new ArrayList<Vertex>();
 		edges = new ArrayList<Edge>();
 
@@ -44,20 +46,15 @@ public class Demo {
 	}
 
 	@Test
-	public void Test() {
-		BellmanFordAlgorithm r = new BellmanFordAlgorithm();
-		r.relax();
-		if (r.cycle()) {
-			for (int i = 0; i < r.n; i++)
-				System.out.println(r.s + " ==> " + r.d[i]);
-		} else {
-			System.out.println(" There is a negative edge cycle ");
-		}
-
-		r.print();
+	public void Test()
+	{
+		BellmanFordAlgorithm r = new BellmanFordAlgorithm(graph);
+		r.execute(vertices.get(0));
+		r.dump();
 	}
-	
-	private void addEdge(String id, int src, int des, int duration) {
+
+	private void addEdge(String id, int src, int des, int duration)
+	{
 		Edge lane = new Edge(id, vertices.get(src), vertices.get(des), duration);
 		edges.add(lane);
 	}
