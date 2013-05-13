@@ -1,6 +1,4 @@
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.LinkedList;
 
 public class Demo {
@@ -20,29 +18,21 @@ public class Demo {
 	}
 
 	Demo() throws IOException {
-		int item;
 		edges = new LinkedList<Edge>();
-		BufferedReader inp = new BufferedReader(
-				new InputStreamReader(System.in));
-
-		System.out.print("Enter number of vertices ");
-		n = Integer.parseInt(inp.readLine());
-
-		System.out.println("Cost Matrix");
-		for (int i = 0; i < n; i++) {
-			for (int j = 0; j < n; j++) {
-				item = Integer.parseInt(inp.readLine());
-				if (item != 0)
-					edges.add(new Edge(i, j, item));
-			}
-		}
-
+		
+		n = 3;
+		edges.add(new Edge(0, 1, 99));
+		edges.add(new Edge(0, 2, 1));
+		edges.add(new Edge(1, 0, 4));
+		edges.add(new Edge(1, 2, 2));
+		edges.add(new Edge(2, 0, 2));
+		edges.add(new Edge(2, 1, 4));
+		
 		e = edges.size();
 		d = new int[n];
 		p = new int[n];
 
-		System.out.print("Enter the source vertex ");
-		s = Integer.parseInt(inp.readLine());
+		s = 0;
 	}
 
 	void relax() {
